@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from core.models import User
+from core.models import User, SampleApps
 
 def login(request):
     # Sayfa request edildiğinde login penceresi gelsin 
@@ -27,10 +27,15 @@ def login(request):
         return redirect('/')
 
 def random_match(request):
-    if request.session.get('is_authenticated'):
-        return render(request, 'random_match.html')
-    else:
-        return redirect('/')
+    if request.method == 'GET':
+        if request.session.get('is_authenticated'):
+            context = {
+                'apps':SampleApps.objects.all()
+            }
+            return render(request, 'random_match.html', context)
+        else:
+            return redirect('/')
+
         
 
 

@@ -12,7 +12,7 @@ class SampleApps(models.Model):
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
 
 class SampleScreenshots(models.Model):
-    app = models.ForeignKey(SampleApps, on_delete=models.CASCADE)
+    app = models.ForeignKey(SampleApps, related_name='Screenshots', on_delete=models.CASCADE)
     file_name = models.CharField(max_length=200, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
