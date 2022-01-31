@@ -21,5 +21,6 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.login, name='login'),
-    path('random_match/', views.random_match, name='random_match')
+    path('random_match/', views.random_match, name='random_match'),
+    path('webp_converter/', views.webp_converter, name='webp_converter')
 ]

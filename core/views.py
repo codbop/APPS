@@ -102,10 +102,7 @@ def random_match(request):
             return JsonResponse({'ss_list':ss_list,
                     'icon':app.icon})
 
-            
-
-
-        
-
-
-
+# Görselin webpye dönüştürülmesini sağlar
+def webp_converter(request):
+    if request.method == 'GET':
+        return render(request, 'webp.html')
