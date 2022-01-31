@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from core.forms import DocumentForm
 from PIL import Image
+import os
 
 def login(request):
 
@@ -110,16 +111,45 @@ def webp(request):
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+
             # imaj verileri veritabanına yüklendikten ve imaj mediaya yüklendikten sonra
-            # kayıt işlemini yapıyoruz.
-            Document.objects.last().description
+            # yüklenen imajın pathini veritabanından çekiyoruz ve elde ettiğimiz path ile de
+            # imajı mediadan çekerek üzerinde webpye dönüştürme işlemi yapıyoruz.
+            filepath = Document.objects.last().document
+
+            # görsel jpg veya png ise işlem yapılsın. Filepath bir filefield objesi olduğu için
+            # uzantı kontrolünü yapabilmek için stringe dönüştürüyoruz.
+            if str(filepath).split('.')[1] in ['jpg', 'png']:
+                im = Image.open(filepath).convert("RGB")
+
+                # media klasöründe webp sonucunun oluşturulacağı klasör açılmış olup
+                # bu klasör içerisine webp dosyası kaydedilmiştir. Htmlde
+                # bu klasör üzerinden görsele ulaşacağız. (/media/webp_result/output.webp)
+                im.save('media/webp_result/output.webp', "webp")
+
+                # sessionda boolean value tutuldu. Bunun nedeni ilk post ettiğimizde get üzerinde
+                # renderın output imaj ile yapılması gerektiğinden. Çünkü post ettiğimizde 
+                # yani upload ettiğimizde imajı sayfada görmeliyiz. 
+                request.session['webp_result'] = True
             return redirect('/webp/')
     else:
+
         # Authenticate kontrolünü yine yapıyoruz get yaparken
         if request.session.get('is_authenticated'):
             form = DocumentForm()
-        else:
-            return redirect('/')
-    return render(request, 'webp.html', {'form':form})
+
+            # post üzerinden get edilmişse bu imajın upload edildiği anlamına gelmektedir. Böylece
+            # imajı basarız ve ardından boolean değişkeni false yaparız ki normal bir get işlemi yapıldığında
+            # yani sayfa normal bir şekilde yüklendiğinde imaj gelmesin. İmaj upload edildiğinde basılmalı.
+            if request.session.get('webp_result') == True:
+                request.session['webp_result'] = False
+
+                # isWebpResult parametresi htmldeki kontrol için oluşturuldu. Eğer posttan get
+                # yapmışsak imaj gösterilmelidir. Ancak normal get yapmışsak htmlye gönderdiğimiz
+                # boolean değişkeni false olmalıdır ve img tagı basılmamalıdır.
+                return render(request, 'webp.html', {'form':form, 'isWebpResult':True})
+            else:
+                return render(request, 'webp.html', {'form':form, 'isWebpResult':False})
+        return redirect('/')
 
 
