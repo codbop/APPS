@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
-from core.models import User, SampleApps
+from core.models import User, SampleApps, Document
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from core.forms import DocumentForm
+from PIL import Image
 
 def login(request):
 
@@ -26,7 +28,7 @@ def login(request):
             User.objects.get(username=username, password=password)
             print('Authenticated')
             request.session['is_authenticated'] = True
-            return redirect('random_match/')
+            return redirect('/random_match/')
         except:
             print('Not Authenticated')
         return redirect('/')
@@ -102,7 +104,22 @@ def random_match(request):
             return JsonResponse({'ss_list':ss_list,
                     'icon':app.icon})
 
-# Görselin webpye dönüştürülmesini sağlar
-def webp_converter(request):
-    if request.method == 'GET':
-        return render(request, 'webp.html')
+# Görselin yükleneceği sayfa
+def webp(request):
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            # imaj verileri veritabanına yüklendikten ve imaj mediaya yüklendikten sonra
+            # kayıt işlemini yapıyoruz.
+            Document.objects.last().description
+            return redirect('/webp/')
+    else:
+        # Authenticate kontrolünü yine yapıyoruz get yaparken
+        if request.session.get('is_authenticated'):
+            form = DocumentForm()
+        else:
+            return redirect('/')
+    return render(request, 'webp.html', {'form':form})
+
+

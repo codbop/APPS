@@ -16,3 +16,9 @@ class SampleScreenshots(models.Model):
     file_name = models.CharField(max_length=200, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+# Media dosyaları için oluşturulan model
+class Document(models.Model):
+    description = models.CharField(max_length=200, blank=True)
+    document = models.FileField(upload_to='images/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
