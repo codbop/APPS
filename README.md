@@ -25,6 +25,7 @@ Bu komutlar çalıştırılarak proje için sanal ortam kolay bir şekilde oluş
 Bu komutların işletilmesi commands.txt dosyasında verilen terminal komutları ile sağlanmaktadır. Sırasıyla;
 
 **docker build --tag python-django .
+ve
 docker run --publish 8000:8000 python-django**
 
 komutları yazılır. İlk komut üstteki komutları işleterek proje için sanal bir ortam oluşturur. Ardından ikinci komut 8000 portu üzerinde cmd
