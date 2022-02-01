@@ -1,6 +1,11 @@
 # APPS
 APPS Mulakat Projesi
 
+
+**Terminalde mevcut dizinde commands.txt'deki satırları sırasıyla çalıştırın. Böylece docker masaüstü uygulaması üzerinde sanal makine oluşacaktır ve uygulama bu makine
+üzerinden başlatılabilecektir.**
+
+
 Dockerfile eklendi. Dockerfile içerisine sanal makine oluşturulması için gerekli komutlar yazıldı. 
 
 Örnek olarak Dockerfile içerisindeki komutlar
