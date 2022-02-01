@@ -7,7 +7,7 @@ Dockerfile eklendi. Dockerfile içerisine sanal makine oluşturulması için ger
 
 ****************************************************************
 ****************************************************************
-**FROM python:3.9.10-slim-buster
+FROM python:3.9.10-slim-buster
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ RUN pip3 install -r requirements.txt
 
 COPY . .
 
-CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]**
+CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
 ****************************************************************
 ****************************************************************
 
@@ -24,13 +24,8 @@ Bu komutlar çalıştırılarak proje için sanal ortam kolay bir şekilde oluş
 
 Bu komutların işletilmesi commands.txt dosyasında verilen terminal komutları ile sağlanmaktadır. Sırasıyla;
 
-**docker build --tag python-django . 
-
-
-
-
-
-docker run --publish 8000:8000 python-django**
+docker build --tag python-django . 
+docker run --publish 8000:8000 python-django
 
 komutları yazılır. İlk komut üstteki komutları işleterek proje için sanal bir ortam oluşturur. Ardından ikinci komut 8000 portu üzerinde cmd
 çalıştırma komutunu uygular ve uygulamayı sanal ortamda publish eder. Docker masaüstü uygulaması üzerinden bu sanal makine kolaylıkla görünür hale
